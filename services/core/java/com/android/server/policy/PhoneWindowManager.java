@@ -3077,8 +3077,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 case 15:
                         attrs.windowAnimations = com.android.internal.R.style.Animation_Toast_SlideRightLeft;
                         break;
-                }
         }
+    }
 
         if (attrs.type != TYPE_STATUS_BAR) {
             // The status bar is the only window allowed to exhibit keyguard behavior.
