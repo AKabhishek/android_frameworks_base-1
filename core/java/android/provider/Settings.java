@@ -3736,7 +3736,6 @@ public final class Settings {
         public static final String TOAST_ICON = "toast_icon";
 
         /**
-<<<<<<< HEAD
          * @hide
          */
         public static final String SHOW_SU_INDICATOR = "show_su_indicator";
@@ -3819,7 +3818,7 @@ public final class Settings {
         /**
          * AOKP Custom System Animations
          * @hide
-         */
+         */  
         public static final String[] ACTIVITY_ANIMATION_CONTROLS = new String[] {
                 "activity_open",
                 "activity_close",
@@ -3831,7 +3830,8 @@ public final class Settings {
                 "wallpaper_close",
                 "wallpaper_intra_open",
                 "wallpaper_intra_close",
-        };
+                "task_open_behind",
+        };  
         public static final String ANIMATION_CONTROLS_DURATION = "animation_controls_duration";
         public static final String ANIMATION_CONTROLS_NO_OVERRIDE = "animation_controls_no_override";
 
