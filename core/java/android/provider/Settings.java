@@ -3701,6 +3701,13 @@ public final class Settings {
          public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
 
         /**
+         * Three Finger Gesture
+         *
+         * @hide
+         */
+        public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
+
+        /**
          * Enable\Disable Bluetooth Battery bar
          * @hide
          */
@@ -3813,12 +3820,6 @@ public final class Settings {
          * @hide
          */
         public static final String QUICK_SETTINGS_TILES_VIBRATE = "quick_settings_vibrate";
-        /**
-         * Enable/Disable screenshot sound
-         * @hide
-         */
-        public static final String SCREENSHOT_SOUND = "screenshot_sound";
-
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
