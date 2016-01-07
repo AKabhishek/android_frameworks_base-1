@@ -3894,6 +3894,7 @@ public final class Settings {
           * @hide
           */
         public static final String QS_DATA_ADVANCED = "qs_data_advanced";
+
         /**
          * Whether to show Brightness Icon On Brightness Slider
          * @hide
