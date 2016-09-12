@@ -3706,7 +3706,7 @@ public final class Settings {
         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
 
         /**
-         * Enable\Disable Bluetooth Battery bar
+         * Enable\Disable Bluetooth Show Battery
          * @hide
          */
         public static final String BLUETOOTH_SHOW_BATTERY = "bluetooth_show_battery";
@@ -3716,6 +3716,12 @@ public final class Settings {
         * @hide
         */
         public static final String HIDE_FROM_RECENTS_LIST = "hide_from_recents_list";
+
+        /**
+         * Disable dashboard suggestions in settings
+         * @hide
+         */
+        public static final String DISABLE_SUGGESTIONS = "disable_suggestions";
 
         /**
          * Network traffic indicator, goes from least to greatest significant bitwise
