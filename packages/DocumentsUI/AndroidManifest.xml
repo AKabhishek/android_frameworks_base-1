@@ -46,7 +46,7 @@
         <activity
             android:name=".LauncherActivity"
             android:label="@string/app_label"
-            android:icon="@mipmap/ic_launcher_filemanager"
+            android:icon="@mipmap/ic_app_icon"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,6 +58,7 @@
             android:name=".FilesActivity"
             android:label="@string/app_label"
             android:icon="@mipmap/ic_launcher_filemanager"
+            android:icon="@mipmap/ic_app_icon"
             android:documentLaunchMode="intoExisting"
             android:theme="@style/DocumentsTheme">
             <intent-filter>
