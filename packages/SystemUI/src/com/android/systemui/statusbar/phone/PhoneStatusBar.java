@@ -5523,7 +5523,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 break;
             case QS_ROWS_PORTRAIT:
             case QS_ROWS_LANDSCAPE:
+                updateResources();
+                break;
             case QS_COLUMNS:
+                if (mHeader != null) {
+                    mHeader.updateSettings();
+                }
                 updateResources();
                 break;
             default:
