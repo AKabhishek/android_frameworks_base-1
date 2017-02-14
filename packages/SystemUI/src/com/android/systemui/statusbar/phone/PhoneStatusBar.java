@@ -62,6 +62,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -327,7 +328,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             Settings.Secure.QS_ROWS_LANDSCAPE;
     private static final String QS_COLUMNS =
             Settings.Secure.QS_COLUMNS;
-
+    private static final String STATUS_BAR_DND_LOGO =
+            "system:" + Settings.System.STATUS_BAR_DND_LOGO;
+    private static final String STATUS_BAR_DND_LOGO_COLOR =
+            "system:" + Settings.System.STATUS_BAR_DND_LOGO_COLOR;
+    private static final String STATUS_BAR_DND_LOGO_STYLE =
+            "system:" + Settings.System.STATUS_BAR_DND_LOGO_STYLE;
     static {
         boolean onlyCoreApps;
         boolean freeformWindowManagement;
@@ -396,6 +402,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     protected NotificationPanelView mNotificationPanel; // the sliding/resizing panel within the notification window
     View mExpandedContents;
     TextView mNotificationPanelDebugText;
+
+    // DND logo
+    private boolean mdndLogo;
+    private int mdndLogoColor;
+    private int mdndLogoStyle;
+    private ImageView dndLogo;
+    private ImageView dndLogoLeft;
+    private ImageView dndLogoRight;
 
     // settings
     private QSPanel mQSPanel;
@@ -804,7 +818,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 STATUS_BAR_BRIGHTNESS_CONTROL,
                 QS_ROWS_PORTRAIT,
                 QS_ROWS_LANDSCAPE,
-                QS_COLUMNS);
+                QS_COLUMNS,
+                STATUS_BAR_DND_LOGO,
+                STATUS_BAR_DND_LOGO_COLOR,
+                STATUS_BAR_DND_LOGO_STYLE);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -3782,6 +3799,43 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }, cancelAction, afterKeyguardGone);
     }
 
+    public void showdndLogo(boolean show, int color, int style) {
+        if (mStatusBarView == null) return;
+        dndLogo = (ImageView) mStatusBarView.findViewById(R.id.dnd_logo);
+        dndLogoLeft = (ImageView) mStatusBarView.findViewById(R.id.dnd_logo_left);
+        dndLogoRight = (ImageView) mStatusBarView.findViewById(R.id.dnd_logo_right);
+
+        if (!show) {
+            dndLogo.setVisibility(View.GONE);
+            dndLogoLeft.setVisibility(View.GONE);
+            dndLogoRight.setVisibility(View.GONE);
+            return;
+        }
+        if (color != 0xFFFFFFFF) {
+            dndLogo.setColorFilter(color, Mode.SRC_IN);
+            dndLogoLeft.setColorFilter(color, Mode.SRC_IN);
+            dndLogoRight.setColorFilter(color, Mode.SRC_IN);
+        } else {
+            dndLogo.clearColorFilter();
+            dndLogoLeft.clearColorFilter();
+            dndLogoRight.clearColorFilter();
+        }
+        if (style == 0) {
+            dndLogo.setVisibility(View.VISIBLE);
+            dndLogoLeft.setVisibility(View.GONE);
+            dndLogoRight.setVisibility(View.GONE);
+        } else if (style == 1) {
+            dndLogo.setVisibility(View.GONE);
+            dndLogoLeft.setVisibility(View.VISIBLE);
+            dndLogoRight.setVisibility(View.GONE);
+        } else if (style == 2) {
+            dndLogo.setVisibility(View.GONE);
+            dndLogoLeft.setVisibility(View.GONE);
+            dndLogoRight.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -5421,6 +5475,20 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mHeader.updateSettings();
                 }
                 updateResources();
+                break;
+            case STATUS_BAR_DND_LOGO_STYLE:
+                mdndLogoStyle =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                showdndLogo(mdndLogo, mdndLogoColor, mdndLogoStyle);
+                break;
+            case STATUS_BAR_DND_LOGO:
+                mdndLogo = newValue != null && Integer.parseInt(newValue) == 1;
+                showdndLogo(mdndLogo, mdndLogoColor, mdndLogoStyle);
+                break;
+            case STATUS_BAR_DND_LOGO_COLOR:
+                mdndLogoColor =
+                        newValue == null ? 0xFFFFFFFF : Integer.parseInt(newValue);
+                showdndLogo(mdndLogo, mdndLogoColor, mdndLogoStyle);
                 break;
             default:
                 break;

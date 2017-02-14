@@ -3920,6 +3920,24 @@ public final class Settings {
         public static final String SHOW_SU_INDICATOR = "show_su_indicator";
 
         /**
+         * Statusbar DND logo
+         * @hide
+         */
+        public static final String STATUS_BAR_DND_LOGO = "status_bar_dnd_logo";
+
+        /**
+         * Statusbar DND logo color setting
+         * @hide
+         */
+        public static final String STATUS_BAR_DND_LOGO_COLOR = "status_bar_dnd_logo_color";
+
+        /**
+         * Statusbar DND logo style
+         * @hide
+         */
+        public static final String STATUS_BAR_DND_LOGO_STYLE = "status_bar_dnd_logo_style";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
