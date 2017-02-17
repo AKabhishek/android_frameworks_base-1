@@ -234,6 +234,13 @@ public class WifiManager {
     @SystemApi
     public static final String WIFI_AP_STATE_CHANGED_ACTION =
         "android.net.wifi.WIFI_AP_STATE_CHANGED";
+    /**
+     * Broadcast intent action indicating that Wi-Fi AP sub system has been restarted.
+     *
+     * @hide
+     */
+    public static final String WIFI_AP_SUB_SYSTEM_RESTART =
+        "android.net.wifi.WIFI_AP_SUB_SYSTEM_RESTART";
 
     /**
      * The lookup key for an int that indicates whether Wi-Fi AP is enabled,
