@@ -67,4 +67,7 @@ interface INetworkStatsService {
     /** Unregisters a callback on data usage. */
     void unregisterUsageRequest(in DataUsageRequest request);
 
+    /** record video call data usage. */
+    void recordVideoCallData(String iface, int ifaceType, long rxBytes, long txBytes);
+
 }
