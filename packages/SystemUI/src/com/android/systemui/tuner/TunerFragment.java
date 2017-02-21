@@ -15,6 +15,7 @@
  */
 package com.android.systemui.tuner;
 
+import android.content.ContentResolver;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -29,6 +30,7 @@ import android.support.v14.preference.PreferenceFragment;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.Preference.OnPreferenceChangeListener;
+import android.support.v7.preference.PreferenceScreen;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,6 +44,8 @@ public class TunerFragment extends PreferenceFragment {
     private static final String TAG = "TunerFragment";
     private static final String TAG_TUNER = "tuner";
 
+    private static final String STATUS_BAR_DND_LOGO = "status_bar_dnd_logo";
+
     private static final String KEY_BATTERY_PCT = "battery_pct";
     private static final String KEY_NAV_BAR = "nav_bar";
     private static final String KEY_STATUS_BAR = "status_bar";
@@ -52,9 +56,19 @@ public class TunerFragment extends PreferenceFragment {
 
     private static final int MENU_REMOVE = Menu.FIRST + 1;
 
+    private SwitchPreference mdndLogo;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        PreferenceScreen prefSet = getPreferenceScreen();
+
+        final ContentResolver resolver = getActivity().getContentResolver();
+
+        mdndLogo = (SwitchPreference) findPreference(STATUS_BAR_DND_LOGO);
+        mdndLogo.setChecked((Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_DND_LOGO, 0) == 1));
 
         setHasOptionsMenu(true);
     }
@@ -101,6 +115,17 @@ public class TunerFragment extends PreferenceFragment {
 
         MetricsLogger.visibility(getContext(), MetricsEvent.TUNER, false);
     }
+
+    @Override
+    public boolean onPreferenceTreeClick(Preference preference) {
+	if  (preference == mdndLogo) {
+            boolean checked = ((SwitchPreference)preference).isChecked();
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.STATUS_BAR_DND_LOGO, checked ? 1:0);
+            return true;
+   }
+        return super.onPreferenceTreeClick(preference);
+}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

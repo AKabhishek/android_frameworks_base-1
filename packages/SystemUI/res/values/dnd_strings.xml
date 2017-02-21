@@ -96,4 +96,8 @@
     <!-- volte icon switch -->
     <string name="status_bar_volte">VoLTE</string>
 
+    <!-- DND Logo -->
+    <string name="status_bar_dnd_logo_title">DND logo</string>
+    <string name="status_bar_dnd_logo_summary">Enable to show DND logo on the left side of the statusbar</string>
+
 </resources>

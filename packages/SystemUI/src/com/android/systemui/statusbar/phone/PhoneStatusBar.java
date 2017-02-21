@@ -327,6 +327,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             Settings.Secure.QS_ROWS_LANDSCAPE;
     private static final String QS_COLUMNS =
             Settings.Secure.QS_COLUMNS;
+    private static final String STATUS_BAR_DND_LOGO =
+            "system:" + Settings.System.STATUS_BAR_DND_LOGO;
 
     static {
         boolean onlyCoreApps;
@@ -373,6 +375,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     WeatherControllerImpl mWeatherController;
 
     int mNaturalBarHeight = -1;
+
+    // DND logo
+    private boolean mdndLogo;
+    private ImageView dndLogo;
 
     Display mDisplay;
     Point mCurrentDisplaySize = new Point();
@@ -804,7 +810,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 STATUS_BAR_BRIGHTNESS_CONTROL,
                 QS_ROWS_PORTRAIT,
                 QS_ROWS_LANDSCAPE,
-                QS_COLUMNS);
+                QS_COLUMNS,
+                STATUS_BAR_DND_LOGO);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -3787,6 +3794,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
         }, cancelAction, afterKeyguardGone);
     }
+
+    public void showdndLogo(boolean show) {
+        if (mStatusBarView == null) return;
+        dndLogo = (ImageView) mStatusBarView.findViewById(R.id.dnd_logo);
+          if (dndLogo != null) {
+              dndLogo.setVisibility(show ? (mdndLogo ? View.VISIBLE : View.GONE) : View.GONE);
+         }
+     }
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
