@@ -327,6 +327,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             Settings.Secure.QS_ROWS_LANDSCAPE;
     private static final String QS_COLUMNS =
             Settings.Secure.QS_COLUMNS;
+    private static final String STATUS_BAR_DND_LOGO =
+            "system:" + Settings.System.STATUS_BAR_DND_LOGO;
+    private static final String STATUS_BAR_DND_LOGO_COLOR =
+            "system:" + Settings.System.STATUS_BAR_DND_LOGO_COLOR;
+    private static final String STATUS_BAR_DND_LOGO_STYLE =
+            "system:" + Settings.System.STATUS_BAR_DND_LOGO_STYLE;
 
     static {
         boolean onlyCoreApps;
@@ -373,6 +379,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     WeatherControllerImpl mWeatherController;
 
     int mNaturalBarHeight = -1;
+
+    // DND logo
+    private boolean mdndLogo;
+    private int mdndLogoColor;
+    private ImageView mdndLogoRight;
+    private ImageView mdndLeft;
+    private int mdndLogoStyle;
 
     Display mDisplay;
     Point mCurrentDisplaySize = new Point();
@@ -804,7 +817,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 STATUS_BAR_BRIGHTNESS_CONTROL,
                 QS_ROWS_PORTRAIT,
                 QS_ROWS_LANDSCAPE,
-                QS_COLUMNS);
+                QS_COLUMNS),
+                STATUS_BAR_DND_LOGO,
+                STATUS_BAR_DND_LOGO_COLOR,
+                STATUS_BAR_DND_LOGO_STYLE);
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new PhoneStatusBarPolicy(mContext, mIconController, mCastController,
@@ -3788,6 +3804,32 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }, cancelAction, afterKeyguardGone);
     }
 
+    public void showdndLogo(boolean show, int color, int style) {
+        if (mStatusBarView == null) return;
+        mdndLogoLeft = (ImageView) mStatusBarView.findViewById(R.id.left_dnd_logo);
+        mdndLogoRight = (ImageView) mStatusBarView.findViewById(R.id.dnd_logo);
+
+        if (!show) {
+            mdndLogoRight.setVisibility(View.GONE);
+            mdndLogoLeft.setVisibility(View.GONE);
+            return;
+        }
+        if (color != 0xFFFFFFFF) {
+            mdndLogoRight.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            mdndLogoLeft.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        } else {
+            mdndLogoRight.clearColorFilter();
+            mdndLogoLeft.clearColorFilter();
+        }
+        if (style == 0) {
+            mdndLogoRight.setVisibility(View.GONE);
+            mdndLogoLeft.setVisibility(View.VISIBLE);
+        } else {
+            mdndLogoLeft.setVisibility(View.GONE);
+            mdndLogoRight.setVisibility(View.VISIBLE);
+        }
+    }
+
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -5428,6 +5470,20 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     mHeader.updateSettings();
                 }
                 updateResources();
+                break;
+            case STATUS_BAR_DND_LOGO_STYLE:
+                mdndLogoStyle =
+                        newValue == null ? 0 : Integer.parseInt(newValue);
+                showdndLogo(mdndLogo, mdndLogoColor, mdndLogoStyle);
+                break;
+            case STATUS_BAR_DND_LOGO:
+                mdndLogo = newValue != null && Integer.parseInt(newValue) == 1;
+                showdndLogo(mdndLogo, mdndLogoColor, mdndLogoStyle);
+                break;
+            case STATUS_BAR_DND_LOGO_COLOR:
+                mdndLogoColor =
+                        newValue == null ? 0xFFFFFFFF : Integer.parseInt(newValue);
+                showdndLogo(mdndLogo, mdndLogoColor, mdndLogoStyle);
                 break;
             default:
                 break;

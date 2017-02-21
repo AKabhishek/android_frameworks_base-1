@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.TypedValue;
@@ -82,6 +83,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     private ClockController mClockController;
     private View mCenterClockLayout;
     private NetworkTraffic mNetworkTraffic;
+    private ImageView mdndLogoRight;
+    private ImageView mdndLogoLeft;
 
     private int mIconSize;
     private int mIconHPadding;
@@ -146,6 +149,8 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mHandler = new Handler();
         mClockController = new ClockController(statusBar, mNotificationIconAreaController, mHandler);
         mCenterClockLayout = statusBar.findViewById(R.id.center_clock_layout);
+        mdndLogoRight = (ImageView) statusBar.findViewById(R.id.dnd_logo);
+        mdndLogoLeft = (ImageView) statusBar.findViewById(R.id.left_dnd_logo);
         loadDimens();
 
         mBatteryLevelView = (BatteryLevelTextView) statusBar.findViewById(R.id.battery_level);
@@ -334,11 +339,23 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
     public void hideSystemIconArea(boolean animate) {
         animateHide(mSystemIconArea, animate);
         animateHide(mCenterClockLayout, animate);
+        if ((Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_DND_LOGO, 0) == 1) &&
+                (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_DND_LOGO_STYLE, 0) == 0)) {
+            animateHide(mdndLogoLeft, animate);
+        }
     }
 
     public void showSystemIconArea(boolean animate) {
         animateShow(mSystemIconArea, animate);
         animateShow(mCenterClockLayout, animate);
+        if ((Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_DND_LOGO, 0) == 1) &&
+                (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_DND_LOGO_STYLE, 0) == 0)) {
+            animateShow(mdndLogoLeft, animate);
+        }
     }
 
     public void hideNotificationIconArea(boolean animate) {
@@ -552,6 +569,12 @@ public class StatusBarIconController extends StatusBarIconList implements Tunabl
         mClockController.setTextColor(mTintArea, mIconTint);
         mBatteryLevelView.setTextColor(getTint(mTintArea, mBatteryLevelView, mIconTint));
         mNetworkTraffic.setDarkIntensity(mDarkIntensity);
+        if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_DND_LOGO_COLOR, 0xFFFFFFFF,
+                UserHandle.USER_CURRENT) == 0xFFFFFFFF) {
+            mdndLogoRight.setImageTintList(ColorStateList.valueOf(mIconTint));
+            mdndLogoLeft.setImageTintList(ColorStateList.valueOf(mIconTint));
+        }
     }
 
     public void appTransitionPending() {
