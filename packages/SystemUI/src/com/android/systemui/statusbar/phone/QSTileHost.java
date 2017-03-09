@@ -60,6 +60,7 @@ import com.android.systemui.qs.tiles.MusicTile;
 import com.android.systemui.qs.tiles.NavigationBarTile;
 import com.android.systemui.qs.tiles.NfcTile;
 import com.android.systemui.qs.tiles.NightDisplayTile;
+import com.android.systemui.qs.tiles.PulseTile;
 import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
