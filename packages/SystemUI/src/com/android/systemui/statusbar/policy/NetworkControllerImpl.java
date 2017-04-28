@@ -825,9 +825,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 }
                 String activity = args.getString("activity");
                 if (activity != null) {
-<<<<<<< HEAD
-                    controller.setActivity(Integer.parseInt(activity));
-=======
                     controller.getState().dataConnected = true;
                     switch (activity) {
                         case "inout":
@@ -845,7 +842,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
                     }
                 } else {
                     controller.setActivity(TelephonyManager.DATA_ACTIVITY_NONE);
->>>>>>> 7e6cdfa... Data activity icon in statusbar
                 }
                 controller.getState().enabled = show;
                 controller.notifyListeners();

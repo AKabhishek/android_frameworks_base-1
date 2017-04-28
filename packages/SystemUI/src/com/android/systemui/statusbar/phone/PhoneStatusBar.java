@@ -37,7 +37,7 @@ import android.annotation.NonNull;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
 import android.app.ActivityOptions;
-import android.app.admin.DevicePolicyManager
+import android.app.admin.DevicePolicyManager;
 import android.app.IActivityManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -198,6 +198,7 @@ import com.android.systemui.statusbar.policy.EncryptionHelper;
 import com.android.systemui.statusbar.policy.FlashlightController;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.HotspotControllerImpl;
+import com.android.systemui.statusbar.policy.KeyButtonView;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.KeyguardUserSwitcher;
 import com.android.systemui.statusbar.policy.LocationControllerImpl;
@@ -1334,6 +1335,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         if (mStackScroller.canChildBeDismissed(childRow)) {
                             if (childRow.getVisibility() == View.VISIBLE) {
                                 viewsToHide.add(childRow);
+                            }
                         }
                     }
                 }
@@ -1543,7 +1545,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     private void prepareNavigationBarView() {
         mNavigationController.getBar().reorient();
-        mNavigationController.getBar().setListeners(mUserAutoHideListener, mLongPressBackListener);
+        mNavigationController.getBar().setListeners(mUserAutoHideListener, this::handleLongPressBackRecents);
         mNavigationController.getBar().setOnVerticalChangedListener(mVerticalChangedListener);
         mAssistManager.onConfigurationChanged();
     }
@@ -1939,12 +1941,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
             ExpandableNotificationRow targetChild = toShow.get(j);
             if (child != targetChild) {
-                // We don't care about non-notification views.
-                continue;
-            }
-
-            ExpandableNotificationRow targetChild = toShow.get(j);
-            if (child != targetChild) {
                 // Oops, wrong notification at this position. Put the right one
                 // here and advance both lists.
                 if (mVisualStabilityManager.canReorderNotification(targetChild)) {
@@ -2140,7 +2136,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         if (SPEW) {
             final boolean clearable = hasActiveNotifications() &&
-                    hasActiveClearableNotifications(
+                    hasActiveClearableNotifications();
             Log.d(TAG, "setAreThereNotifications: N=" +
                     mNotificationData.getActiveNotifications().size() + " any=" +
                     hasActiveNotifications() + " clearable=" + clearable);
@@ -5183,8 +5179,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 if ((time - mLastLockToAppLongPress) < LOCK_TO_APP_GESTURE_TOLERENCE) {
                     activityManager.stopLockTaskMode();
                     return true;
-                } else if ((v.getId() == R.id.back)
-                        && !mNavigationBarView.getRecentsButton().getCurrentView().isPressed()) {
+                } else if (v.getId() == R.id.back) {
                     // If we aren't pressing recents right now then they presses
                     // won't be together, so send the standard long-press action.
                     sendBackLongPress = true;
