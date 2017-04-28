@@ -3950,11 +3950,10 @@ public final class Settings {
         public static final String DATA_ACTIVITY_ARROWS = "data_activity_arrows";
 
         /**
-         * Toast animations
-         *
+	 * Omni Jaws Weather icon pack
          * @hide
          */
-        public static final String TOAST_ANIMATION = "toast_animation";
+        public static final String OMNIJAWS_WEATHER_ICON_PACK = "omnijaws_weather_icon_pack";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
